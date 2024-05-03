@@ -19,10 +19,7 @@ autoinstall:
     layout:
       name: direct
   user-data:
-    disable_root: false
-  ssh:
-    install-server: true
-    allow-pw: true
+    disable_root: true
   snaps:
     - name: gnome-3-38-2004
       channel: latest/stable
@@ -33,9 +30,12 @@ autoinstall:
   apt:
     preserve_sources_list: false
     primary:
-      - arches: [amd64, i386]
+      - arches: [amd64]
         uri: http://archive.ubuntu.com/ubuntu/
   late-commands:
-    - curtin in-target --target=/target -- bash -c 'apt-get update && apt-get upgrade -y && apt-get autoclean && apt-get autoremove -y'
-    - echo 'sothy ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/90-sothy-nopasswd
+    - curtin in-target --target=/target -- bash -c 'apt-get update && apt-get install -y software-properties-common'
+    - curtin in-target --target=/target -- bash -c 'apt-get update && apt-get install -y code build-essential nemo blueman nautilus-dropbox r-base r-recommended'
+    - curtin in-target --target=/target -- bash -c 'cd /tmp && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && apt install ./google-chrome-stable_current_amd64.deb -y && rm google-chrome-stable_current_amd64.deb'
+    - curtin in-target --target=/target -- bash -c 'cd /tmp && wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb && apt install ./teamviewer_amd64.deb -y && rm teamviewer_amd64.deb'
+
     
