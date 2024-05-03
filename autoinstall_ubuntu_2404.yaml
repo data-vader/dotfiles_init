@@ -1,5 +1,3 @@
-#cloud-config
-#echo "test" | mkpasswd --method=sha-512 --stdin
 autoinstall:
   version: 1
   identity:
