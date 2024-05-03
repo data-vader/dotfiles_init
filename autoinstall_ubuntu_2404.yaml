@@ -1,0 +1,43 @@
+#cloud-config
+#echo "test" | mkpasswd --method=sha-512 --stdin
+autoinstall:
+  version: 1
+  identity:
+    hostname: omega
+    username: sothy
+    password: $6$N4dZklDKHD.eIs8N$eT3FHi2M17/CZjUWHovWj.MBU7KkPXAtAawrcZHvNxWw4RGsirXm07ID3uJWg0KGXOebUoQHZTmzZxrXKErEJ1
+  locale: de_CH.UTF-8
+  keyboard:
+    layout: ch
+    variant: ''
+  timezone: Europe/Zurich
+  network:
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          dhcp4: true
+  storage:
+    layout:
+      name: direct
+  user-data:
+    disable_root: false
+  ssh:
+    install-server: true
+    allow-pw: true
+  snaps:
+    - name: gnome-3-38-2004
+      channel: latest/stable
+      classic: false
+  packages:
+    - ubuntu-desktop
+  updates: security
+  apt:
+    preserve_sources_list: false
+    primary:
+      - arches: [amd64, i386]
+        uri: http://archive.ubuntu.com/ubuntu/
+  late-commands:
+    - curtin in-target --target=/target -- bash -c 'apt-get update && apt-get upgrade -y && apt-get autoclean && apt-get autoremove -y'
+    - echo 'sothy ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/90-sothy-nopasswd
+    
